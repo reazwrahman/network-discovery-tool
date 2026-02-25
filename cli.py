@@ -44,21 +44,33 @@ def run_arp_via_sudo(iface, results_file=None, return_hosts=False):
 
     hosts = []
     if proc.stdout:
-        try:
-            data = json.loads(proc.stdout)
-            if isinstance(data, list):
-                hosts = [h.get("ip") for h in data if isinstance(h, dict) and h.get("ip")]
-        except Exception:
-            print(proc.stdout)
+        # Try to extract JSON from last line (hosts data)
+        lines = proc.stdout.strip().split("\n")
+        for line in lines:
+            try:
+                data = json.loads(line)
+                if isinstance(data, list):
+                    hosts = data  # Keep full dicts with both IP and MAC
+                    # Print indexed format for user display
+                    for i, h_dict in enumerate(data):
+                        ip = h_dict.get("ip")
+                        mac = h_dict.get("mac")
+                        if mac:
+                            print(f"[{i}] {ip}  {mac}")
+                        else:
+                            print(f"[{i}] {ip}")
+                    break
+            except json.JSONDecodeError:
+                continue
 
     if proc.stderr:
         print(proc.stderr, file=sys.stderr)
 
-    if results_file:
+    if results_file and hosts:
         append_result(results_file, "arp", hosts)
 
     if return_hosts:
-        return hosts
+        return [h.get("ip") for h in hosts]
 
 
 def run_ping_sweep_local(iface, results_file=None, return_hosts=False):

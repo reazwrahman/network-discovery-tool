@@ -10,10 +10,10 @@ def arp_scan(iface_name, iface_ip, iface_netmask):
     ether = Ether(dst="ff:ff:ff:ff:ff:ff")
     packet = ether / arp
 
-    ans, _ = srp(packet, timeout=3, iface=iface_name, verbose=False)
+    ans, unans = srp(packet, timeout=3, iface=iface_name, verbose=False)
 
     hosts = []
-    for _, received in ans:
+    for sent, received in ans:
         hosts.append({"ip": received.psrc, "mac": received.hwsrc})
 
     return hosts
@@ -34,17 +34,8 @@ def main():
     except Exception as ex:
         print(ex)
 
-    # Print results as an indexed list including MAC when available
-    if not hosts:
-        print("No hosts found.")
-        return
-    for i, h in enumerate(hosts):
-        ip = h.get("ip")
-        mac = h.get("mac")
-        if mac:
-            print(f"[{i}] {ip}  {mac}")
-        else:
-            print(f"[{i}] {ip}")
+    # Output as JSON for programmatic parsing by CLI
+    print(json.dumps(hosts))
 
 
 if __name__ == "__main__":
