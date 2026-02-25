@@ -90,7 +90,7 @@ def run_ping_sweep_local(iface, results_file=None, return_hosts=False):
     if return_hosts:
         return hosts
 
-def run_mdns_discovery_local(iface):
+def run_mdns_discovery_local(iface, results_file=None):
     # import here to avoid side-effects at module import time
     import asyncio
     import dns_discovery
@@ -98,10 +98,13 @@ def run_mdns_discovery_local(iface):
         print("Interface missing IP; cannot run mDNS discovery.")
         return
     print(f"Running mDNS discovery on {iface['ipv4']}...")
-    asyncio.run(dns_discovery.run_mdns_discovery(iface["ipv4"], duration_sec=10))
+    discovered_services = asyncio.run(dns_discovery.run_mdns_discovery(iface["ipv4"], duration_sec=10))
+    
+    if results_file and discovered_services:
+        append_result(results_file, "mdns", discovered_services)
 
 
-def run_port_scan_interactive(iface):
+def run_port_scan_interactive(iface, results_file=None):
     """Ask user to pick a discovery method (ARP or ping sweep) to get IPs, then scan them."""
     import port_scanner
     print("Running ping sweep to collect all active hosts first")
@@ -123,6 +126,9 @@ def run_port_scan_interactive(iface):
             print(f"\n{ip}: Open ports: {ports}")
         else:
             print(f"\n{ip}: No open ports detected.")
+    
+    if results_file:
+        append_result(results_file, "port_scanner", results)
 
 def main():
     parser = argparse.ArgumentParser(description="Interactive network discovery CLI")
@@ -168,9 +174,9 @@ def main():
         elif choice == "2":
             run_ping_sweep_local(selected, results_file=results_file)
         elif choice == "3":
-            run_mdns_discovery_local(selected)
+            run_mdns_discovery_local(selected, results_file=results_file)
         elif choice == "4":
-            run_port_scan_interactive(selected)
+            run_port_scan_interactive(selected, results_file=results_file)
         else:
             print("Please enter 1, 2, 3, or 4.")
             continue

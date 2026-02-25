@@ -5,6 +5,7 @@ from zeroconf.asyncio import AsyncZeroconf, AsyncServiceBrowser
 class MyListener:
     def __init__(self, azc):
         self.azc = azc
+        self.discovered_services = []
 
     def add_service(self, zc, type_, name):
         # We found an instance! Now we create a task to get its details.
@@ -26,10 +27,28 @@ class MyListener:
             print(f"  Port: {info.port}")
             # TXT Records are properties/metadata
             print(f"  Metadata (TXT): {info.properties}")
+            
+            # Convert metadata bytes to strings for JSON serialization
+            metadata = {}
+            if info.properties:
+                for k, v in info.properties.items():
+                    key = k.decode() if isinstance(k, bytes) else k
+                    val = v.decode() if isinstance(v, bytes) else v
+                    metadata[key] = val
+            
+            # Collect for returning
+            self.discovered_services.append({
+                "name": name,
+                "service_type": type_,
+                "ip_addresses": [str(ip) for ip in info.parsed_addresses()],
+                "port": info.port,
+                "metadata": metadata
+            })
 
 
 async def run_mdns_discovery(interface_ip, duration_sec=10):
-    """Run mDNS discovery on the given interface IP for specified duration."""
+    """Run mDNS discovery on the given interface IP for specified duration.
+    Returns a list of discovered services."""
     azc = AsyncZeroconf(interfaces=[interface_ip])
     listener = MyListener(azc)
 
@@ -41,6 +60,8 @@ async def run_mdns_discovery(interface_ip, duration_sec=10):
     print(f"Listening for {duration_sec} seconds on {interface_ip}...")
     await asyncio.sleep(duration_sec)
     await azc.async_close()
+    
+    return listener.discovered_services
 
 
 async def main():

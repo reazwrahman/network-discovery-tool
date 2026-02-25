@@ -1,5 +1,5 @@
 {
-  "session_timestamp": "2026-02-25T15:31:34.873247",
+  "session_timestamp": "2026-02-25T15:38:31.982078",
   "selected_interface": {
     "name": "en0",
     "ipv4": "192.168.1.37",
@@ -8,22 +8,69 @@
   },
   "scan_results": [
     {
-      "timestamp": "2026-02-25T15:31:38.480753",
-      "discovery_type": "ping_sweep",
+      "timestamp": "2026-02-25T15:38:45.876882",
+      "discovery_type": "mdns",
       "hosts": [
-        "192.168.1.1",
-        "192.168.1.12",
-        "192.168.1.37",
-        "192.168.1.174",
-        "192.168.1.184",
-        "192.168.1.204",
-        "192.168.1.209",
-        "192.168.1.221",
-        "192.168.1.232"
+        {
+          "name": "Reaz\u2019s Laptop._airplay._tcp.local.",
+          "service_type": "_airplay._tcp.local.",
+          "ip_addresses": [
+            "192.168.1.37",
+            "fe80::805:47d9:1038:6731"
+          ],
+          "port": 7000,
+          "metadata": {
+            "act": "2",
+            "acl": "0",
+            "deviceid": "6C:B1:33:98:FB:01",
+            "fex": "1c9/St5PF7g2IQQ",
+            "features": "0x4A7FCFD5,0xB8174FDE",
+            "rsf": "0x8",
+            "flags": "0x204",
+            "gid": "40D00F5A-B65C-4A31-9845-2BA094EAFE1F",
+            "igl": "0",
+            "gcgl": "0",
+            "model": "MacBookPro18,3",
+            "at": "4",
+            "protovers": "1.1",
+            "pi": "00000000-0000-0000-0000-68dbcac796df",
+            "psi": "D87D4BCF-0F88-416C-8B1A-7C18F395CB4A",
+            "pk": "b5be79090117d68b499ca00a8f245365aebf62f801b185ae6990728fe5e49f4c",
+            "srcvers": "775.3.1"
+          }
+        },
+        {
+          "name": "Leviathan._airplay._tcp.local.",
+          "service_type": "_airplay._tcp.local.",
+          "ip_addresses": [
+            "192.168.1.184",
+            "fe80::1445:792c:3f6:92a5"
+          ],
+          "port": 7000,
+          "metadata": {
+            "act": "2",
+            "acl": "0",
+            "deviceid": "22:50:14:38:96:AC",
+            "fex": "1c9/St5PFzg2IYxA",
+            "features": "0x4A7FCFD5,0x38174FDE",
+            "rsf": "0x8",
+            "flags": "0x204",
+            "gid": "9B9B7E0C-5257-4BEB-A7A2-2B6432C1E149",
+            "igl": "0",
+            "gcgl": "0",
+            "model": "MacBookPro18,3",
+            "at": "4",
+            "protovers": "1.1",
+            "pi": "00000000-0000-0000-0000-940c98046e52",
+            "psi": "22501438-96AC-46F0-B3E6-9180A92834C2",
+            "pk": "49dc737ddf9b1c1a0556a66f0d783b0b5d1587b19673e83afc4f0c1057cd2424",
+            "srcvers": "925.5.1"
+          }
+        }
       ]
     },
     {
-      "timestamp": "2026-02-25T15:31:45.170019",
+      "timestamp": "2026-02-25T15:38:54.031746",
       "discovery_type": "arp",
       "hosts": [
         {
@@ -35,16 +82,20 @@
           "mac": "a8:6e:84:f8:41:71"
         },
         {
-          "ip": "192.168.1.184",
-          "mac": "8e:ed:30:3e:5b:d9"
-        },
-        {
           "ip": "192.168.1.204",
           "mac": "36:e5:ed:bc:75:71"
         },
         {
+          "ip": "192.168.1.198",
+          "mac": "8a:e4:a8:ea:cc:ef"
+        },
+        {
           "ip": "192.168.1.224",
           "mac": "64:49:7d:e3:ae:59"
+        },
+        {
+          "ip": "192.168.1.161",
+          "mac": "3c:6a:a7:75:7f:97"
         },
         {
           "ip": "192.168.1.174",
@@ -57,14 +108,6 @@
         {
           "ip": "192.168.1.221",
           "mac": "00:92:c3:9d:0b:9d"
-        },
-        {
-          "ip": "192.168.1.161",
-          "mac": "3c:6a:a7:75:7f:97"
-        },
-        {
-          "ip": "192.168.1.37",
-          "mac": "6c:b1:33:98:fb:01"
         },
         {
           "ip": "192.168.1.232",
