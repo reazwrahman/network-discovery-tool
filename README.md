@@ -74,7 +74,7 @@ NetworkDiscoveryTool/
 ├── ping_sweep.py           # Async ping sweep
 ├── dns_discovery.py        # mDNS service discovery
 ├── port_scanner.py         # Async port scanning
-├── results/                # Output JSON files (auto-created)
+├── results/                # Output JSON files 
 └── README.md
 ```
 
@@ -114,23 +114,9 @@ NetworkDiscoveryTool/
 - [ ] **Automated test suite (pytest)
 - [ ] **Improved sudo handling (pty-based or password cache)
 
-
-
-## Validation & Testing
-
-Each module was tested incrementally:
-- `network_interface.py`: Verified actual interfaces returned correctly
-- `ping_sweep.py`: Confirmed async tasks complete and timeouts work
-- `arp.py`: Tested with `sudo` to ensure JSON output and user display work
-- `dns_discovery.py`: Verified byte-string conversion and async cleanup
-- `port_scanner.py`: Confirmed port detection on common services
-- `cli.py` integration: Walked through all 4 discovery flows and verified JSON output
-
-No automated test suite (future work), but manual end-to-end testing performed on macOS.
-
 ## AI Assistance Documentation
 
-**Tool Used:** Claude Haiku (via VS Code GitHub Copilot)
+**Tool Used:** Claude Haiku (via VS Code GitHub Copilot) and Gemini/ChatGPT to understand the high level networking concepts such as ARP, DNS Discovery etc. 
 
 ### Generated Code
 - Full `cli.py` structure and discovery function shells
@@ -138,8 +124,11 @@ No automated test suite (future work), but manual end-to-end testing performed o
 - Refactoring of `ping_sweep.py`, `arp.py` to expose reusable functions
 
 ## Sample Use
+A video_demo file is attached with this repository: `video_demo.mov`
 
-
+![alt text](images/image.png)
+![alt text](images/image-1.png)
+![alt text](images/image-2.png)
 ---
 
 **Developed with AI assistance (Claude Haiku via GitHub Copilot)**  
