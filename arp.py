@@ -1,5 +1,6 @@
 from scapy.all import ARP, Ether, srp
 import ipaddress
+import json
 
 
 def arp_scan(iface_name, iface_ip, iface_netmask):
@@ -18,9 +19,8 @@ def arp_scan(iface_name, iface_ip, iface_netmask):
     return hosts
 
 
-def _main():
+def main():
     import argparse
-    import json
 
     parser = argparse.ArgumentParser(description="Run an ARP scan on a given interface.")
     parser.add_argument("--iface-name", required=True)
@@ -28,9 +28,24 @@ def _main():
     parser.add_argument("--netmask", required=True)
     args = parser.parse_args()
 
-    hosts = arp_scan(args.iface_name, args.iface_ip, args.netmask)
-    print(json.dumps(hosts))
+    print(f"Running ARP Scan now for ip {args.iface_ip}")
+    try:
+        hosts = arp_scan(args.iface_name, args.iface_ip, args.netmask)
+    except Exception as ex:
+        print(ex)
+
+    # Print results as an indexed list including MAC when available
+    if not hosts:
+        print("No hosts found.")
+        return
+    for i, h in enumerate(hosts):
+        ip = h.get("ip")
+        mac = h.get("mac")
+        if mac:
+            print(f"[{i}] {ip}  {mac}")
+        else:
+            print(f"[{i}] {ip}")
 
 
 if __name__ == "__main__":
-    _main()
+    main()

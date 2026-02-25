@@ -32,8 +32,8 @@ def select_interface_interactive(ifaces):
 def run_arp_via_sudo(iface):
     script_path = os.path.join(os.path.dirname(__file__), "arp.py")
     python_exec = sys.executable or "python3"
-    cmd = ["sudo", python_exec, script_path, "--iface-name", iface["name"], "--iface-ip", iface["ipv4"], "--netmask", iface["netmask"]]
     print("Running ARP scan with sudo. You may be prompted for your admin password...")
+    cmd = ["sudo", python_exec, script_path, "--iface-name", iface["name"], "--iface-ip", iface["ipv4"], "--netmask", iface["netmask"]]
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True)
     except FileNotFoundError as e:
@@ -43,11 +43,6 @@ def run_arp_via_sudo(iface):
     if proc.stdout:
         try:
             data = json.loads(proc.stdout)
-            if isinstance(data, list):
-                for i, h in enumerate(data):
-                    print(f"[{i}] {h}")
-            else:
-                print(proc.stdout)
         except Exception:
             print(proc.stdout)
 
@@ -96,7 +91,7 @@ def main():
     print("Selected interface:", selected)
 
     # Action menu
-    print("\nActions:\n 1) ARP discovery (requires sudo)\n 2) Ping sweep")
+    print("\nActions:\n 1) ARP discovery (requires sudo/admin password)\n 2) Ping sweep")
     while True:
         choice = input("Pick action (1/2, q to quit): ").strip()
         if choice.lower() in ("q", "quit", "exit"):
