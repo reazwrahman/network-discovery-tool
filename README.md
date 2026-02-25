@@ -111,8 +111,8 @@ NetworkDiscoveryTool/
 - [ ] **MQTT listener:** Basic listener to subscribe to wildcard topics and log device announcements
 - [ ] **Live UI updates:** Simple progress bar or updating display (using `rich`, `textual`, or plain prints)
 - [ ] **Filter options:** Allow users to filter results (e.g., only scan certain ports, look for specific service types)
-- [ ] **Automated test suite (pytest)
-- [ ] **Improved sudo handling (pty-based or password cache)
+- [ ] Automated test suite (pytest)
+- [ ] Improved sudo handling (pty-based or password cache)
 
 ## AI Assistance Documentation
 
@@ -132,4 +132,3 @@ A video_demo file is attached with this repository: `video_demo.mov`
 ---
 
 **Developed with AI assistance (Claude Haiku via GitHub Copilot)**  
-**Last Updated:** February 25, 2026
