@@ -131,26 +131,30 @@ def main():
 
     print("Selected interface:", selected)
 
-    # Action menu
-    print("\nActions:\n 1) ARP discovery (requires sudo/admin password)\n 2) Ping sweep\n 3) mDNS/Zeroconf discovery\n 4) Port scanner")
+    # Action menu loop
     while True:
+        print("\nActions:\n 1) ARP discovery (requires sudo/admin password)\n 2) Ping sweep\n 3) mDNS/Zeroconf discovery\n 4) Port scanner")
         choice = input("Pick action (1/2/3/4, q to quit): ").strip()
         if choice.lower() in ("q", "quit", "exit"):
-            print("Cancelled.")
+            print("Exiting.")
             return
         if choice == "1":
             run_arp_via_sudo(selected)
-            return
-        if choice == "2":
+        elif choice == "2":
             run_ping_sweep_local(selected)
-            return
-        if choice == "3":
+        elif choice == "3":
             run_mdns_discovery_local(selected)
-            return
-        if choice == "4":
+        elif choice == "4":
             run_port_scan_interactive(selected)
+        else:
+            print("Please enter 1, 2, 3, or 4.")
+            continue
+        
+        # After action completes, prompt to continue or exit
+        again = input("\nPerform another discovery? (y/n): ").strip().lower()
+        if again not in ("y", "yes"):
+            print("Exiting.")
             return
-        print("Please enter 1, 2, 3, or 4.")
 
 
 if __name__ == "__main__":
