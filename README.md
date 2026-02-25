@@ -90,7 +90,7 @@ NetworkDiscoveryTool/
 
 **Solution:** Used `subprocess.run(..., capture_output=True, text=True)` to capture output, but this hides prompts. Trade-off: User is shown "You may be prompted..." message; if password is needed, it may timeout or fail silently. Future work: use `pty` or `sudo -S` with proper stdin handling.
 
-### Challenge 4: Async Event Loop Lifecycle in mDNS
+### Challenge 3: Async Event Loop Lifecycle in mDNS
 **Problem:** Zeroconf listener collects services asynchronously; need to ensure all pending tasks complete before returning.
 
 **Solution:** Fixed sleep duration (10 seconds) to allow adequate discovery time, then close the connection. Result: may miss services discovered after 10 seconds, but guarantees safe shutdown.
