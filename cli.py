@@ -83,25 +83,9 @@ def run_mdns_discovery_local(iface):
 def run_port_scan_interactive(iface):
     """Ask user to pick a discovery method (ARP or ping sweep) to get IPs, then scan them."""
     import port_scanner
-    
-    print("\nChoose discovery method to get hosts for port scanning:")
-    print(" 1) ARP discovery (requires sudo)")
-    print(" 2) Ping sweep")
-    
-    while True:
-        choice = input("Pick (1/2, q to cancel): ").strip()
-        if choice.lower() in ("q", "quit", "exit"):
-            print("Port scan cancelled.")
-            return
-        if choice == "1":
-            hosts = run_arp_via_sudo(iface, return_hosts=True)
-            break
-        elif choice == "2":
-            hosts = run_ping_sweep_local(iface, return_hosts=True)
-            break
-        else:
-            print("Please enter 1 or 2.")
-    
+    print("Running ping sweep to collect all active hosts first")
+    hosts = run_ping_sweep_local(iface, return_hosts=True)
+
     if not hosts:
         print("No hosts discovered. Aborting port scan.")
         return
