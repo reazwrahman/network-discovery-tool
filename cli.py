@@ -29,7 +29,7 @@ def select_interface_interactive(ifaces):
         print("Index out of range.")
 
 
-def run_arp_via_sudo(iface):
+def run_arp_via_sudo(iface, return_hosts=False):
     script_path = os.path.join(os.path.dirname(__file__), "arp.py")
     python_exec = sys.executable or "python3"
     print("Running ARP scan with sudo. You may be prompted for your admin password...")
@@ -38,29 +38,86 @@ def run_arp_via_sudo(iface):
         proc = subprocess.run(cmd, capture_output=True, text=True)
     except FileNotFoundError as e:
         print("Failed to run command:", e, file=sys.stderr)
-        return
+        return [] if return_hosts else None
 
+    hosts = []
     if proc.stdout:
         try:
             data = json.loads(proc.stdout)
+            if isinstance(data, list):
+                hosts = [h.get("ip") for h in data if isinstance(h, dict) and h.get("ip")]
         except Exception:
             print(proc.stdout)
 
     if proc.stderr:
         print(proc.stderr, file=sys.stderr)
 
+    if return_hosts:
+        return hosts
 
-def run_ping_sweep_local(iface):
-    # import here to avoid side-effects at module import time
+
+def run_ping_sweep_local(iface, return_hosts=False):
+    # import here to avoid side effects at module import time
     import ping_sweep
     if not iface.get("ipv4") or not iface.get("netmask"):
         print("Interface missing IP/netmask; cannot run ping sweep.")
-        return
+        return [] if return_hosts else None
     print(f"Running ping sweep for {iface['ipv4']}/{iface['netmask']}...")
     hosts = ping_sweep.run_ping_sweep(iface["ipv4"], iface["netmask"])
     for i, h in enumerate(hosts):
         print(f"[{i}] {h}")
+    if return_hosts:
+        return hosts
 
+def run_mdns_discovery_local(iface):
+    # import here to avoid side-effects at module import time
+    import asyncio
+    import dns_discovery
+    if not iface.get("ipv4"):
+        print("Interface missing IP; cannot run mDNS discovery.")
+        return
+    print(f"Running mDNS discovery on {iface['ipv4']}...")
+    asyncio.run(dns_discovery.run_mdns_discovery(iface["ipv4"], duration_sec=10))
+
+
+def run_port_scan_interactive(iface):
+    """Ask user to pick a discovery method (ARP or ping sweep) to get IPs, then scan them."""
+    import port_scanner
+    
+    print("\nChoose discovery method to get hosts for port scanning:")
+    print(" 1) ARP discovery (requires sudo)")
+    print(" 2) Ping sweep")
+    
+    while True:
+        choice = input("Pick (1/2, q to cancel): ").strip()
+        if choice.lower() in ("q", "quit", "exit"):
+            print("Port scan cancelled.")
+            return
+        if choice == "1":
+            hosts = run_arp_via_sudo(iface, return_hosts=True)
+            break
+        elif choice == "2":
+            hosts = run_ping_sweep_local(iface, return_hosts=True)
+            break
+        else:
+            print("Please enter 1 or 2.")
+    
+    if not hosts:
+        print("No hosts discovered. Aborting port scan.")
+        return
+    
+    print(f"\nDiscovered {len(hosts)} host(s): {hosts}")
+    print(f"Scanning ports on {len(hosts)} host(s)...")
+    results = port_scanner.run_port_scan(hosts)
+    
+    if not results:
+        print("No results.")
+        return
+    for ip, ports in results.items():
+        if ports:
+            print(f"\n{ip}: Open ports: {ports}")
+        else:
+            print(f"\n{ip}: No open ports detected.")
 
 def main():
     parser = argparse.ArgumentParser(description="Interactive network discovery CLI")
@@ -91,9 +148,9 @@ def main():
     print("Selected interface:", selected)
 
     # Action menu
-    print("\nActions:\n 1) ARP discovery (requires sudo/admin password)\n 2) Ping sweep")
+    print("\nActions:\n 1) ARP discovery (requires sudo/admin password)\n 2) Ping sweep\n 3) mDNS/Zeroconf discovery\n 4) Port scanner")
     while True:
-        choice = input("Pick action (1/2, q to quit): ").strip()
+        choice = input("Pick action (1/2/3/4, q to quit): ").strip()
         if choice.lower() in ("q", "quit", "exit"):
             print("Cancelled.")
             return
@@ -103,7 +160,13 @@ def main():
         if choice == "2":
             run_ping_sweep_local(selected)
             return
-        print("Please enter 1 or 2.")
+        if choice == "3":
+            run_mdns_discovery_local(selected)
+            return
+        if choice == "4":
+            run_port_scan_interactive(selected)
+            return
+        print("Please enter 1, 2, 3, or 4.")
 
 
 if __name__ == "__main__":

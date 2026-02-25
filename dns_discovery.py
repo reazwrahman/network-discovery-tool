@@ -28,9 +28,9 @@ class MyListener:
             print(f"  Metadata (TXT): {info.properties}")
 
 
-async def main():
-    selected_ip = "192.168.1.37"
-    azc = AsyncZeroconf(interfaces=[selected_ip])
+async def run_mdns_discovery(interface_ip, duration_sec=10):
+    """Run mDNS discovery on the given interface IP for specified duration."""
+    azc = AsyncZeroconf(interfaces=[interface_ip])
     listener = MyListener(azc)
 
     # Commonly used IoT service types to look for
@@ -38,9 +38,14 @@ async def main():
 
     browser = AsyncServiceBrowser(azc.zeroconf, services_to_watch, listener)
 
-    print("Listening for 10 seconds...")
-    await asyncio.sleep(10)
+    print(f"Listening for {duration_sec} seconds on {interface_ip}...")
+    await asyncio.sleep(duration_sec)
     await azc.async_close()
+
+
+async def main():
+    selected_ip = "192.168.1.37"
+    await run_mdns_discovery(selected_ip, duration_sec=10)
 
 
 if __name__ == "__main__":
