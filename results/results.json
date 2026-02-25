@@ -1,0 +1,16 @@
+{
+  "session_timestamp": "2026-02-25T15:25:22.425309",
+  "selected_interface": {
+    "name": "en0",
+    "ipv4": "192.168.1.37",
+    "netmask": "255.255.255.0",
+    "mac": "6c:b1:33:98:fb:01"
+  },
+  "scan_results": [
+    {
+      "timestamp": "2026-02-25T15:25:30.821827",
+      "discovery_type": "arp",
+      "hosts": []
+    }
+  ]
+}

@@ -4,7 +4,9 @@ import sys
 import os
 import subprocess
 import json
+from datetime import datetime
 from network_interface import get_interfaces, list_interfaces
+from results_manager import get_session_filename, initialize_results_file, append_result
 
 
 def select_interface_interactive(ifaces):
@@ -29,7 +31,7 @@ def select_interface_interactive(ifaces):
         print("Index out of range.")
 
 
-def run_arp_via_sudo(iface, return_hosts=False):
+def run_arp_via_sudo(iface, results_file=None, return_hosts=False):
     script_path = os.path.join(os.path.dirname(__file__), "arp.py")
     python_exec = sys.executable or "python3"
     print("Running ARP scan with sudo. You may be prompted for your admin password...")
@@ -52,11 +54,14 @@ def run_arp_via_sudo(iface, return_hosts=False):
     if proc.stderr:
         print(proc.stderr, file=sys.stderr)
 
+    if results_file:
+        append_result(results_file, "arp", hosts)
+
     if return_hosts:
         return hosts
 
 
-def run_ping_sweep_local(iface, return_hosts=False):
+def run_ping_sweep_local(iface, results_file=None, return_hosts=False):
     # import here to avoid side effects at module import time
     import ping_sweep
     if not iface.get("ipv4") or not iface.get("netmask"):
@@ -66,6 +71,10 @@ def run_ping_sweep_local(iface, return_hosts=False):
     hosts = ping_sweep.run_ping_sweep(iface["ipv4"], iface["netmask"])
     for i, h in enumerate(hosts):
         print(f"[{i}] {h}")
+    
+    if results_file:
+        append_result(results_file, "ping_sweep", hosts)
+    
     if return_hosts:
         return hosts
 
@@ -130,6 +139,10 @@ def main():
         return
 
     print("Selected interface:", selected)
+    
+    # Initialize results file for this session
+    results_file = get_session_filename()
+    initialize_results_file(results_file, selected)
 
     # Action menu loop
     while True:
@@ -139,9 +152,9 @@ def main():
             print("Exiting.")
             return
         if choice == "1":
-            run_arp_via_sudo(selected)
+            run_arp_via_sudo(selected, results_file=results_file)
         elif choice == "2":
-            run_ping_sweep_local(selected)
+            run_ping_sweep_local(selected, results_file=results_file)
         elif choice == "3":
             run_mdns_discovery_local(selected)
         elif choice == "4":
