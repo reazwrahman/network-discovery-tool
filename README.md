@@ -19,7 +19,7 @@ A comprehensive CLI tool for discovering and analyzing devices on local networks
 ## Quick Start
 
 ### Prerequisites
-- Python Python 3.11.9 (used for development)
+- Python 3.11.9 (used for development)
 - macOS or Linux (developed on macOS, should work on Linux but not tested)
 - Virtual environment (recommended)
 
