@@ -15,7 +15,11 @@ async def async_ping(ip):
         stderr=asyncio.subprocess.DEVNULL
     )
     await proc.communicate()
-    return ip if proc.returncode == 0 else None
+    if proc.returncode == 0:
+        print(f'[Active]: {ip}')
+        return ip
+    else:
+        return None
 
 
 async def ping_sweep_async(ip, netmask):
