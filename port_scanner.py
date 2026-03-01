@@ -1,7 +1,7 @@
 import asyncio
 
 
-COMMON_PORTS = [80, 443, 554, 8000, 8080, 8554, 5353]
+COMMON_PORTS = [80, 443, 554, 8000, 8080, 8554, 5353, 9090]
 
 async def scan_port(ip, port, timeout=1):
     try:
