@@ -24,7 +24,8 @@ async def scan_all_hosts(hosts):
     tasks = {ip: scan_host_ports(ip) for ip in hosts}
     results = {}
     for ip, task in tasks.items():
-        results[ip] = await task
+        results[ip] = await task 
+        print(f"Scanned {ip}: Open ports: {results[ip]}")
     return results
 
 
@@ -36,4 +37,4 @@ def run_port_scan(hosts):
 if __name__ == "__main__":
     hosts = ['192.168.1.1', '192.168.1.12', '192.168.1.37', '192.168.1.174', '192.168.1.184', '192.168.1.198', '192.168.1.209', '192.168.1.221', '192.168.1.232', '192.168.1.241']
     results = run_port_scan(hosts)
-    print(results)
+    # print(results)

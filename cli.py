@@ -121,11 +121,6 @@ def run_port_scan_interactive(iface, results_file=None):
     if not results:
         print("No results.")
         return
-    for ip, ports in results.items():
-        if ports:
-            print(f"\n{ip}: Open ports: {ports}")
-        else:
-            print(f"\n{ip}: No open ports detected.")
     
     if results_file:
         append_result(results_file, "port_scanner", results)
