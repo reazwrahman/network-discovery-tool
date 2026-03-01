@@ -18,14 +18,13 @@ async def scan_port(ip, port, timeout=1):
 async def scan_host_ports(ip):
     tasks = [scan_port(ip, p) for p in COMMON_PORTS]
     results = await asyncio.gather(*tasks)
-    return [p for p in results if p]
+    results = [p for p in results if p]
+    print(f'{ip}: {results}')
+    return {ip: [p for p in results if p]}
 
 async def scan_all_hosts(hosts):
-    tasks = {ip: scan_host_ports(ip) for ip in hosts}
-    results = {}
-    for ip, task in tasks.items():
-        results[ip] = await task 
-        print(f"Scanned {ip}: Open ports: {results[ip]}")
+    tasks = [scan_host_ports(ip) for ip in hosts]
+    results = await asyncio.gather(*tasks)
     return results
 
 
@@ -37,4 +36,4 @@ def run_port_scan(hosts):
 if __name__ == "__main__":
     hosts = ['192.168.1.1', '192.168.1.12', '192.168.1.37', '192.168.1.174', '192.168.1.184', '192.168.1.198', '192.168.1.209', '192.168.1.221', '192.168.1.232', '192.168.1.241']
     results = run_port_scan(hosts)
-    # print(results)
+    print(results)

@@ -82,7 +82,7 @@ def run_ping_sweep_local(iface, results_file=None, return_hosts=False):
     print(f"Running ping sweep for {iface['ipv4']}/{iface['netmask']}...")
     hosts = ping_sweep.run_ping_sweep(iface["ipv4"], iface["netmask"])
     for i, h in enumerate(hosts):
-        print(f"[{i}] {h}")
+            print(f"[{i}] {h}")
     
     if results_file:
         append_result(results_file, "ping_sweep", hosts)
