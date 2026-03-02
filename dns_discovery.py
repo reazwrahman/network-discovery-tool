@@ -1,8 +1,8 @@
 import asyncio
-from zeroconf.asyncio import AsyncZeroconf, AsyncServiceBrowser
+from zeroconf.asyncio import AsyncZeroconf, AsyncServiceBrowser, ServiceListener
 
 
-class MyListener:
+class MyListener(ServiceListener):
     def __init__(self, azc):
         self.azc = azc
         self.discovered_services = []
