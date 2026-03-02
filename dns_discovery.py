@@ -69,14 +69,14 @@ async def run_mdns_discovery(interface_ip, duration_sec=10):
         await asyncio.sleep(duration_sec)
         await azc.async_close()
 
-    ## watch for all service types first
-    print(" ------ Phase 1: Running a wide cast net to find all the service names in the UDP ------")
+    ## watch for all service categories first
+    print(" ------ Phase 1: Running a wide cast net to find all available service categories ------")
     azc = AsyncZeroconf(interfaces=[interface_ip])
     listener = MyListener(azc, ["_services._dns-sd._udp.local."], False)
     await discover(azc, listener)
 
     ## now run a more targeted discovery for device details
-    print(" ------ Phase 2: Now running a targeted discovery with the devices found in phase 1 ------")
+    print(" ------ Phase 2: Now running a targeted discovery with the device categories from phase 1 ------")
     azc = AsyncZeroconf(interfaces=[interface_ip])
     targeted_listener = MyListener(azc, listener.discovered_services, True)
     await discover(azc, targeted_listener)
