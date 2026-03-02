@@ -50,7 +50,7 @@ python3 cli.py
    - **2) Ping Sweep** – Finds responsive hosts via ICMP
    - **3) mDNS Discovery** – Discovers services advertised via Zeroconf (AirPlay, HTTP, printers, etc.)
    - **4) Port Scanner** – Scans common ports on discovered hosts
-3. Results are saved to `results/results_YYYY-MM-DD_HHMMSS.json`
+3. Results are saved to `results/results.json`
 4. Continue with more discoveries or exit
 
 ## Libraries Used & Rationale
@@ -106,13 +106,14 @@ NetworkDiscoveryTool/
 
 ## Future Enhancements
 
+- [ ] **Support multi NIC selection:** Support multiple network interface selection at runtime and grouping results by each NIC
 - [ ] **Port scanner improvements:** Support both ARP and ping sweep as discovery options
 - [ ] **SSDP / UPnP discovery:** Discover devices and services via UPnP on selected interfaces
 - [ ] **MQTT listener:** Basic listener to subscribe to wildcard topics and log device announcements
 - [ ] **Live UI updates:** Simple progress bar or updating display (using `rich`, `textual`, or plain prints)
 - [ ] **Filter options:** Allow users to filter results (e.g., only scan certain ports, look for specific service types)
-- [ ] Automated test suite (pytest)
-- [ ] Improved sudo handling (pty-based or password cache)
+- [ ] **Automated test suite** (pytest)
+- [ ] **Improved sudo handling** (pty-based or password cache)
 
 ## AI Assistance Documentation
 
